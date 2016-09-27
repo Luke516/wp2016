@@ -1,3 +1,36 @@
-hello world~
+<head>
 
-<a href="http://imgur.com/PB5k0zV"><img src="http://i.imgur.com/PB5k0zV.jpg" title="source: imgur.com" /></a>
+	<script type="text/javascript" src="webgl.js"></script>
+</head>
+
+<body onload="webGLStart();">
+	<h1>hello world~</h1>
+	<a href="http://learningwebgl.com/blog/?p=28">&lt;&lt; Back to Lesson 1</a><br />
+
+	<canvas id="lesson01-canvas" style="border: none;" width="500" height="500"></canvas>
+
+	<br/>
+	<a href="http://learningwebgl.com/blog/?p=28">&lt;&lt; Back to Lesson 1</a><br />
+
+	<a href="http://imgur.com/PB5k0zV"><img src="http://i.imgur.com/PB5k0zV.jpg" title="source: imgur.com" /></a>
+</body>
+
+<script id="shader-fs" type="x-shader/x-fragment">
+  precision mediump float;
+
+  void main(void) {
+    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+  }
+</script>
+
+<script id="shader-vs" type="x-shader/x-vertex">
+  attribute vec3 aVertexPosition;
+
+  uniform mat4 uMVMatrix;
+  uniform mat4 uPMatrix;
+
+  void main(void) {
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+  }
+</script>
+

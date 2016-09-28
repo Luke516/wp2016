@@ -5,12 +5,14 @@
 	<script type="text/javascript" src="webgl.js"></script>
 </head>
 
-<body onload="webGLStart();">
+<body onload="main();">
 	<h1>hello world~</h1>
 
 	<canvas id="lesson01-canvas" style="border: none;" width="500" height="500"></canvas>
 
 	<a href="http://imgur.com/PB5k0zV"><img src="http://i.imgur.com/PB5k0zV.jpg" title="source: imgur.com" /></a>
+
+	<textarea cols="100" rows="20" id="out" name="out"></textarea>
 </body>
 
 <script id="shader-fs" type="x-shader/x-fragment">
@@ -24,11 +26,12 @@
 <script id="shader-vs" type="x-shader/x-vertex">
   attribute vec3 aVertexPosition;
 
-  uniform mat4 uMVMatrix;
-  uniform mat4 uPMatrix;
+  uniform mat4 M;
+  uniform mat4 V;
+  uniform mat4 P;
 
   void main(void) {
-    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    gl_Position = P * V * M * vec4(aVertexPosition, 1.0);
   }
 </script>
 

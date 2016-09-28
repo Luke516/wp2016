@@ -2,7 +2,7 @@ var triangleVertexPositionBuffer;
 var squareVertexPositionBuffer;	
 
 	function webGLStart() {
-    	var canvas = document.getElementById("lesson01-canvas");
+    var canvas = document.getElementById("lesson01-canvas");
     initGL(canvas);
     initShaders();
     initBuffers();
@@ -11,7 +11,19 @@ var squareVertexPositionBuffer;
     gl.enable(gl.DEPTH_TEST);
 
     drawScene();
+
+    readObjFile("file:///C:/Users/LukeWu/git/AOCTDF/files/AgeOfCube/models/cube.obj");
+    tick();
   }
+
+  function tick() {
+    requestAnimFrame(tick);
+    drawScene();
+    animate();
+  }
+
+  var rTri = 0;
+  var rSquare = 0;
 
   function initBuffers() {
     triangleVertexPositionBuffer = gl.createBuffer();
@@ -44,6 +56,9 @@ var squareVertexPositionBuffer;
     mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
     mat4.identity(mvMatrix);
     mat4.translate(mvMatrix, [-1.5, 0.0, -7.0]);
+
+		mat4.rotate(mvMatrix, degToRad(rTri), [0, 1, 0]);
+
     gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexPositionBuffer);
     gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, triangleVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
     setMatrixUniforms();

@@ -17,9 +17,9 @@ var squareVertexPositionBuffer;
   }
 
   function tick() {
-    requestAnimFrame(tick);
+    //requestAnimFrame(tick);
     drawScene();
-    animate();
+    //animate();
   }
 
   var rTri = 0;
@@ -48,6 +48,10 @@ var squareVertexPositionBuffer;
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
     squareVertexPositionBuffer.itemSize = 3;
     squareVertexPositionBuffer.numItems = 4;
+  }
+
+  function degToRad(degrees) {
+      return degrees * Math.PI / 180;
   }
 
   function drawScene() {

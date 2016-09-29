@@ -203,7 +203,7 @@ function handleLoadedTexture(texture) {
   gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, texture.image);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-  gl.bindTexture(gl.TEXTURE_2D, null);
+  //gl.bindTexture(gl.TEXTURE_2D, null);
   alert("texture loaded");
 
   gl.uniform1i(shaderProgram.samplerUniform, 0); /*0 for texture 0*/  alert("uniform1i");

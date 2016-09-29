@@ -18,20 +18,31 @@
 <script id="shader-fs" type="x-shader/x-fragment">
   precision mediump float;
 
+  uniform sampler2D sampler2d;
+
+  varying vec2 uv;
+
   void main(void) {
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+  	vec4 color = texture2D(sampler2d, uv);
+  	gl_FragColor = color;
+    //gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
   }
 </script>
 
 <script id="shader-vs" type="x-shader/x-vertex">
   attribute vec3 aVertexPosition;
+  attribute vec3 aNormalPosition;
+  attribute vec2 aUVPosition;
 
   uniform mat4 M;
   uniform mat4 V;
   uniform mat4 P;
 
+  varying vec2 uv;
+
   void main(void) {
     gl_Position = P * V * M * vec4(aVertexPosition, 1.0);
+    uv = aUVPosition;
   }
 </script>
 

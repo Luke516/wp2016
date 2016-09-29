@@ -30,7 +30,7 @@ loadObj = function(model, file) {
 	var tmp_vertices=[], tmp_uvs=[], tmp_normals=[], tmps=[], f=[];
 	var indices=[];
 	$.get(file, function(data) {
-        alert(data);
+        //alert(data);
     
 	    var substrings = data.replace( /\n/g, ' ').split(' ');
 	    /*for(var i=0; i<substrings.length; i++){

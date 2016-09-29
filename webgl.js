@@ -96,7 +96,6 @@ function drawScene() {
 
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, texture_id);
-  alert("uniform1i");
  
   setMatrixUniforms();
   //gl.uniform1i(shaderProgram.samplerUniform, 0); //0 for texture 0
@@ -207,7 +206,7 @@ function handleLoadedTexture(texture) {
   gl.bindTexture(gl.TEXTURE_2D, null);
   alert("texture loaded");
 
-  gl.uniform1i(shaderProgram.samplerUniform, 0); //0 for texture 0
+  gl.uniform1i(shaderProgram.samplerUniform, 0); /*0 for texture 0*/  alert("uniform1i");
   
   gl.drawArrays(gl.TRIANGLES, 0, triangleVertexBuffer.numItems);
 }

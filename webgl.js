@@ -194,7 +194,7 @@ function initTexture() {
   texture_id.image.onload = function() {
     handleLoadedTexture(texture_id)
   }
-  texture_id.image.src = "test.bmp";
+  texture_id.image.src = "https://jackraken.github.io/wp2016/test.bmp";
   
 }
 

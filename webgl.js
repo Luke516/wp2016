@@ -11,7 +11,7 @@ function main(){
 }
 
 function loadAllObj(){
-	loadObj(cube, "https://jackraken.github.io/wp2016/cube.obj");
+	loadObj(cube, "https://jackraken.github.io/wp2016/monkey.obj");
 }
 
 function webGLStart() {

@@ -96,6 +96,7 @@ function drawScene() {
 
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, texture_id);
+  alert("uniform1i");
   gl.uniform1i(shaderProgram.samplerUniform, 0); //0 for texture 0
 
   setMatrixUniforms();
@@ -195,7 +196,6 @@ function initTexture() {
     handleLoadedTexture(texture_id)
   }
   texture_id.image.src = "https://jackraken.github.io/wp2016/test.bmp";
-  
 }
 
 function handleLoadedTexture(texture) {
@@ -205,5 +205,6 @@ function handleLoadedTexture(texture) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
   gl.bindTexture(gl.TEXTURE_2D, null);
+  alert("texture loaded");
 }
 

@@ -21,7 +21,7 @@ function webGLStart() {
 	  initGL(canvas);
 	  initShaders();
 	  initBuffers();
-	  initTexture();
+	  initTexture("https://jackraken.github.io/wp2016/test.bmp");
 
 	  gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	  gl.enable(gl.DEPTH_TEST);
@@ -97,11 +97,11 @@ function drawScene() {
   gl.activeTexture(gl.TEXTURE0);
   gl.bindTexture(gl.TEXTURE_2D, texture_id);
   alert("uniform1i");
-  gl.uniform1i(shaderProgram.samplerUniform, 0); //0 for texture 0
-
+ 
   setMatrixUniforms();
+  //gl.uniform1i(shaderProgram.samplerUniform, 0); //0 for texture 0
 
-  gl.drawArrays(gl.TRIANGLES, 0, triangleVertexBuffer.numItems);
+  //gl.drawArrays(gl.TRIANGLES, 0, triangleVertexBuffer.numItems);
 }
 
 var gl;
@@ -189,13 +189,13 @@ function setMatrixUniforms() {
 }
 
 var texture_id;
-function initTexture() {
+function initTexture(image_src) {
   texture_id = gl.createTexture();
   texture_id.image = new Image();
   texture_id.image.onload = function() {
     handleLoadedTexture(texture_id)
   }
-  texture_id.image.src = "https://jackraken.github.io/wp2016/test.bmp";
+  texture_id.image.src = image_src;
 }
 
 function handleLoadedTexture(texture) {
@@ -206,5 +206,9 @@ function handleLoadedTexture(texture) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
   gl.bindTexture(gl.TEXTURE_2D, null);
   alert("texture loaded");
+
+  gl.uniform1i(shaderProgram.samplerUniform, 0); //0 for texture 0
+  
+  gl.drawArrays(gl.TRIANGLES, 0, triangleVertexBuffer.numItems);
 }
 

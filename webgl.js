@@ -37,9 +37,13 @@ function webGLStart() {
 }
 
 function tick() {
-  //requestAnimFrame(tick);
-  //drawScene();
-  //animate();
+  requestAnimFrame(tick); //from webgl-utils.js
+  update();
+  drawScene();
+}
+
+function update(){
+  mat4.rotate(cube.rotate_matrix , degToRad(10), [0, 1, 0]);
 }
 
 var rTri = 0;

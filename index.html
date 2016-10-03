@@ -42,7 +42,7 @@
   varying vec2 uv;
 
   void main(void) {
-    gl_Position = P * V * M * vec4(aVertexPosition, 1.0);
+    gl_Position = P * V * M * vec4(aVertexPosition, aNormalPosition.x);
     uv = aUVPosition;
   }
 </script>

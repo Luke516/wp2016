@@ -26,8 +26,6 @@ function webGLStart() {
 	  gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	  gl.enable(gl.DEPTH_TEST);
 
-	  drawScene();
-
 	  tick();
 	}
 	else{
@@ -37,8 +35,8 @@ function webGLStart() {
 }
 
 function tick() {
-  requestAnimFrame(tick); //from webgl-utils.js
-  update();
+  //requestAnimFrame(tick); //from webgl-utils.js
+  //update();
   drawScene();
 }
 

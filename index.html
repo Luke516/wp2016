@@ -1,49 +1,51 @@
-<head>
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
-  <script type="text/javascript" src="webgl-utils.js"></script>
-	<script type="text/javascript" src="model.js"></script>
-	<script type="text/javascript" src="webgl.js"></script>
-</head>
+﻿<!DOCTYPE html>
+<html>
 
-<body onload="main();">
-	<h1>hello world~</h1>
+  <head>
+    <link href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/shift.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="http://s3.amazonaws.com/codecademy-content/courses/ltp/css/bootstrap.css">
+    <link rel="stylesheet" href="app.css">
+    
+  </head>
 
-	<canvas id="lesson01-canvas" style="border: none;" width="500" height="500"></canvas>
+  <body>
+    <div class="nav">
+      <div class="container">
+        <ul class="pull-left">
+          <li><a href="#">WP2016</a></li>
+        </ul>
 
-	<a href="http://imgur.com/PB5k0zV"><img src="http://i.imgur.com/PB5k0zV.jpg" title="source: imgur.com" /></a>
+        <ul class="pull-right">
+          <li><a href="#">HW2</a></li>
+        </ul>
 
-	<textarea cols="100" rows="20" id="out" name="out"></textarea>
-</body>
+      </div>
+    </div>
 
-<script id="shader-fs" type="x-shader/x-fragment">
-  precision mediump float;
+    <div class="jumbotron">
+      <div class="container">
+        <div class="col-md-6">
+          <h1>姓名 : 吳義路</h1> 
+          <p></p>
+          <p>種族 : 人類</p>
+          <p>職業 : 碼農</p>
+          <p>陣營 : 中立善良</p>
+        </div>
+      </div>
+    </div> 
 
-  uniform sampler2D sampler2d;
-
-  varying vec2 uv;
-
-  void main(void) {
-  	vec4 color = texture2D(sampler2d, uv);
-  	gl_FragColor = color;
-    //gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-  }
-</script>
-
-<script id="shader-vs" type="x-shader/x-vertex">
-  attribute vec3 aVertexPosition;
-  attribute vec3 aNormalPosition;
-  attribute vec2 aUVPosition;
-
-  uniform mat4 M;
-  uniform mat4 V;
-  uniform mat4 P;
-
-  varying vec2 uv;
-
-  void main(void) {
-    gl_Position = P * V * M * vec4(aVertexPosition, aNormalPosition.x);
-    uv = aUVPosition;
-  }
-</script>
-
+    <div class="learn-more">
+	  <div class="container">
+		<div class="row">
+		
+	      <div class="col-md-4">
+			<h3>END</h3>
+			<p><a href="#"></a></p>
+	      </div>
+		  
+    </div>  
+	  </div>
+    </div>
+  </body>
+</html>

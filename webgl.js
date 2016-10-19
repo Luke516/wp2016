@@ -2,30 +2,43 @@ var triangleVertexBuffer;
 var triangleNormalBuffer;
 var triangleUVBuffer; 
 
-var cube = new Model();
+var cube;
+
 var inited = false;
 
+var draw_objects = [];
+var update_objects = [];
+
 function main(){
-	loadAllObj();
+  var canvas = document.getElementById("lesson01-canvas");
+  initGL(canvas);
+	loadAllObjs();
+  loadAllTextures()
 	webGLStart();
 }
 
-function loadAllObj(){
-	loadObj(cube, "https://jackraken.github.io/wp2016/monkey.obj");
+function loadAllTextures(){
+  initTexture("test.bmp");
 }
 
 function webGLStart() {
-	if(loaded > 0){
-		var canvas = document.getElementById("lesson01-canvas");
+	if(loaded > 2){
+		
+    cube = new Ship(all_models[0]);
+    //all_models[0].sayVertices();
 
-	  initGL(canvas);
 	  initShaders();
 	  initBuffers();
-	  initTexture("https://jackraken.github.io/wp2016/test.bmp");
 
 	  gl.clearColor(0.0, 0.0, 0.0, 1.0);
 	  gl.enable(gl.DEPTH_TEST);
 
+    document.onkeydown = handleKeyDown;
+    document.onkeyup = handleKeyUp;
+
+    update_objects.push(cube);
+
+    //drawScene();
 	  tick();
 	}
 	else{
@@ -35,13 +48,45 @@ function webGLStart() {
 }
 
 function tick() {
-  //requestAnimFrame(tick); //from webgl-utils.js
-  //update();
+  //alert("tick");
+  requestAnimFrame(tick); //from webgl-utils.js
+  handleKeys();
+  update();
   drawScene();
 }
 
 function update(){
-  mat4.rotate(cube.rotate_matrix , degToRad(10), [0, 1, 0]);
+  //alert("update");
+  //mat4.rotate(cube.rotate_matrix , degToRad(1), [0, 1, 0]);
+  update_objects.forEach(function(obj){
+    obj.update();
+  });
+}
+
+var currentlyPressedKeys = {};
+
+function handleKeyDown(event) {
+  currentlyPressedKeys[event.key] = true;
+
+}
+
+function handleKeyUp(event) {
+  currentlyPressedKeys[event.key] = false;
+}
+
+function handleKeys() {
+  if (currentlyPressedKeys["a"]) {// Left cursor key
+    mat4.translate(cube.translate_matrix , [-0.02, 0, 0]);
+  }
+  if (currentlyPressedKeys["d"]) {// Right cursor key
+    mat4.translate(cube.translate_matrix , [0.02, 0, 0]);
+  }
+  if (currentlyPressedKeys["w"]) {// Up cursor key
+    mat4.translate(cube.translate_matrix , [0, 0, -0.02]);
+  }
+  if (currentlyPressedKeys["s"]) {// Down cursor key
+    mat4.translate(cube.translate_matrix , [0, 0, 0.02]);
+  }
 }
 
 var rTri = 0;
@@ -55,22 +100,23 @@ function initBuffers() {
   //cube.sayVertices();
   //alert("123");
   //alert(cube.vertices);
+  //alert(cube.model.vertices.length);
   gl.bindBuffer(gl.ARRAY_BUFFER, triangleVertexBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cube.vertices), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cube.model.vertices), gl.STATIC_DRAW);
   triangleVertexBuffer.itemSize = 3;
-  triangleVertexBuffer.numItems = cube.vertices.length / triangleVertexBuffer.itemSize;
+  triangleVertexBuffer.numItems = cube.model.vertices.length / triangleVertexBuffer.itemSize;
   //gl.enableVertexAttribArray(0);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, triangleNormalBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cube.normals), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cube.model.normals), gl.STATIC_DRAW);
   triangleNormalBuffer.itemSize = 3;
-  triangleNormalBuffer.numItems = cube.normals.length / triangleNormalBuffer.itemSize;
+  triangleNormalBuffer.numItems = cube.model.normals.length / triangleNormalBuffer.itemSize;
   //gl.enableVertexAttribArray(1);
 
   gl.bindBuffer(gl.ARRAY_BUFFER, triangleUVBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cube.uvs), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(cube.model.uvs), gl.STATIC_DRAW);
   triangleUVBuffer.itemSize = 2;
-  triangleUVBuffer.numItems = cube.uvs.length / triangleUVBuffer.itemSize;
+  triangleUVBuffer.numItems = cube.model.uvs.length / triangleUVBuffer.itemSize;
   //gl.enableVertexAttribArray(2);
 
 }
@@ -84,8 +130,10 @@ function drawScene() {
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   mat4.perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 100.0, pMatrix);
   mat4.identity(vMatrix);
-  mat4.translate(vMatrix, [-1.5, 0.0, -7.0]);
-	mat4.rotate(vMatrix, degToRad(rTri), [0, 1, 0]);
+  mat4.lookAt([0,10,1], [0,0,0], [0,1,0], vMatrix);
+  //alert(vMatrix);
+  //mat4.translate(vMatrix, [-1.5, 0.0, -7.0]);
+	//mat4.rotate(vMatrix, degToRad(rTri), [0, 1, 0]);
 
 	//setMatrixUniforms();
 
@@ -100,9 +148,9 @@ function drawScene() {
   gl.bindTexture(gl.TEXTURE_2D, texture_id);
  
   setMatrixUniforms();
-  //gl.uniform1i(shaderProgram.samplerUniform, 0); //0 for texture 0
+  gl.uniform1i(shaderProgram.samplerUniform, 0); //0 for texture 0
 
-  //gl.drawArrays(gl.TRIANGLES, 0, triangleVertexBuffer.numItems);
+  gl.drawArrays(gl.TRIANGLES, 0, triangleVertexBuffer.numItems);
 }
 
 var gl;
@@ -206,10 +254,10 @@ function handleLoadedTexture(texture) {
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
   //gl.bindTexture(gl.TEXTURE_2D, null);
-  alert("texture loaded");
+  //alert("texture loaded");
 
-  gl.uniform1i(shaderProgram.samplerUniform, 0); /*0 for texture 0*/  alert("uniform1i");
+  //gl.uniform1i(shaderProgram.samplerUniform, 0); /*0 for texture 0*/  alert("uniform1i");
   
-  gl.drawArrays(gl.TRIANGLES, 0, triangleVertexBuffer.numItems);
+  //gl.drawArrays(gl.TRIANGLES, 0, triangleVertexBuffer.numItems);
 }
 

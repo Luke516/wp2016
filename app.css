@@ -1,3 +1,7 @@
+.nav {
+  /*height: 40px;*/
+}
+
 .nav a {
   color: #5a5a5a;
   font-size: 11px;
@@ -13,14 +17,14 @@
 .jumbotron {
   /*background-image:url('http://www.fanaru.com/doge/image/18360-doge-doge-simple.jpg');*/
   background-color: grey;
-  height: 500px;
+  height: 320px;
   background-repeat: no-repeat;
   background-size: cover;
 }
 
 .jumbotron .container {
   position: relative;
-  top:100px;
+  top:10px;
 }
 
 .jumbotron h1 {

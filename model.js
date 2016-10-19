@@ -1,27 +1,20 @@
 var loaded = 0;
 
+var all_models = [];
+
 function Model(){
+	this.model_file = "";
 	this.vertices = [];
 	this.uvs = [];
 	this.normals = [];
-	this.rotate_matrix = mat4.create();
-	this.translate_matrix = mat4.create();
-	this.scale_matrix = mat4.create();
-	this.model_matrix = mat4.create();
-	mat4.identity(this.rotate_matrix);
-	mat4.identity(this.translate_matrix);
-	mat4.identity(this.scale_matrix);
-	mat4.identity(this.model_matrix);
-}
-
-Model.prototype.getModelMatrix = function(){
-	mat4.multiply(this.translate_matrix, this.rotate_matrix, this.model_matrix);
-	mat4.multiply(this.model_matrix, this.scale_matrix, this.model_matrix);
-	return this.model_matrix;
 }
 
 Model.prototype.sayVertices = function(){
-	alert(this.vertices);
+	alert(this.vertices[0]);
+}
+
+Model.prototype.update = function(){
+  //mat4.rotate(this.rotate_matrix , degToRad(1), [0, 1, 0]);
 }
 
 loadObj = function(model, file) {
@@ -100,3 +93,12 @@ loadObj = function(model, file) {
 	//alert(model.vertices);
 }
 
+loadAllObjs = function() {
+	all_models.push(new Model());
+	all_models.push(new Model());
+	all_models.push(new Model());
+	loadObj(all_models[0], "ship01.obj");
+	loadObj(all_models[1], "ship02.obj");
+	loadObj(all_models[2], "ship03.obj");
+	//cube.loadObj("ship01.obj");
+}

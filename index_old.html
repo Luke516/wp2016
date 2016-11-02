@@ -1,0 +1,102 @@
+﻿<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
+    <script type="text/javascript" src="webgl-utils.js"></script>
+    <script type="text/javascript" src="ship.js"></script>
+    <script type="text/javascript" src="model.js"></script>
+    <script type="text/javascript" src="webgl.js"></script>
+    <link href="bootstrap.min.css" rel="stylesheet">
+    <link href="app.css" rel="stylesheet">
+    
+  </head>
+
+  <body onload="main();">
+    <div class="nav">
+      <div class="container">
+        <ul class="pull-left">
+          
+          <li><h1>WP2016</h1></li>
+        </ul>
+
+        <ul class="pull-right">
+        </ul>
+
+      </div>
+    </div>
+
+    <div class="jumbotron">
+      <div class="container">
+        <div class="col-md-9">
+          <p>你好，我叫吳義路。</p>
+          <p>目前就讀成功大學資訊工程學系四年級</p>
+          <p>擅長C/C++、Java和openGL</p>
+          <p>興趣有看書、彈鋼琴、烘焙等</p>
+          <p>很高興認識你~</p>
+        </div>
+        <div class="col-md-3">
+          <a href="#"><img src="me1.jpg" width="50%" height="50%"> </a>
+        </div>
+      </div>
+    </div> 
+
+    <div class="neighborhood-guides">
+        <div class="container">
+            <h2>webGL test</h2>
+            
+            <canvas id="lesson01-canvas" style="border: none;" width="500" height="500"></canvas>
+            <textarea cols="100" rows="20" id="out" name="out" style="display:none"></textarea>
+            
+        </div>
+    </div>
+
+    <div class="learn-more">
+	  <div class="container">
+		<div class="row">
+		
+	      <div class="col-md-4">
+			<h3>END</h3>
+			<p><a href="#"></a></p>
+	      </div>
+		  
+    </div>  
+	  </div>
+    </div>
+  </body>
+</html>
+
+
+<script id="shader-fs" type="x-shader/x-fragment">
+  precision mediump float;
+
+  uniform sampler2D sampler2d;
+
+  varying vec2 uv;
+
+  void main(void) {
+    vec4 color = texture2D(sampler2d, uv);
+    gl_FragColor = color;
+    //gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
+  }
+</script>
+
+<script id="shader-vs" type="x-shader/x-vertex">
+  attribute vec3 aVertexPosition;
+  attribute vec3 aNormalPosition;
+  attribute vec2 aUVPosition;
+
+  uniform mat4 M;
+  uniform mat4 V;
+  uniform mat4 P;
+
+  varying vec2 uv;
+
+  void main(void) {
+    gl_Position = P * V * M * vec4(aVertexPosition, 1.0);
+    uv = aUVPosition;
+  }
+</script>
+

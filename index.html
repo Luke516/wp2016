@@ -1,102 +1,205 @@
-﻿<!DOCTYPE html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>three.js webgl - interactive - buffergeometry</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				color: #cccccc;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				background-color: #050505;
+				margin: 0px;
+				overflow: hidden;
+			}
+			#info {
+				position: absolute;
+				top: 25%; width: 100%;
+				padding: 5px;
+				background-color: rgba(0, 0, 0, 0.6);
+			}
+			#pic {
+				padding-left: 20px;
+				padding-right: 20px;
+				position: relative;
+				display: inline;
+			}
+			h1{
+				font-size: 32px;
+			}
+			a {
+				color: #0080ff;
+			}
+		</style>
+	</head>
+	<body>
 
-  <head>
-    <meta charset="utf-8">
-    <script type="text/javascript" src="js/jquery.min.js"></script>
-    <script type="text/javascript" src="glMatrix-0.9.5.min.js"></script>
-    <script type="text/javascript" src="webgl-utils.js"></script>
-    <script type="text/javascript" src="ship.js"></script>
-    <script type="text/javascript" src="model.js"></script>
-    <script type="text/javascript" src="webgl.js"></script>
-    <link href="bootstrap.min.css" rel="stylesheet">
-    <link href="app.css" rel="stylesheet">
-    
-  </head>
+		<div id="container"></div>
 
-  <body onload="main();">
-    <div class="nav">
-      <div class="container">
-        <ul class="pull-left">
-          
-          <li><h1>WP2016</h1></li>
-        </ul>
+		<div id="info">
+			<h1>你好，我是吳義路</h1>
+			<p>真金不一定閃閃發光，並非浪子都迷失放向</p>
+			
+			<div id="pic">
+				<a href=""><img src="fb-mark.png" height="36px"></a>
+			</div>
+			<div id="pic">
+				<a href="https://github.com/jackraken"><img src="github-mark.png" height="40px"></a>
+			</div>
+		</div>
 
-        <ul class="pull-right">
-        </ul>
 
-      </div>
-    </div>
+		<script src="js/three.min.js"></script>
 
-    <div class="jumbotron">
-      <div class="container">
-        <div class="col-md-9">
-          <p>你好，我叫吳義路。</p>
-          <p>目前就讀成功大學資訊工程學系四年級</p>
-          <p>擅長C/C++、Java和openGL</p>
-          <p>興趣有看書、彈鋼琴、烘焙等</p>
-          <p>很高興認識你~</p>
-        </div>
-        <div class="col-md-3">
-          <a href="#"><img src="me1.jpg" width="50%" height="50%"> </a>
-        </div>
-      </div>
-    </div> 
+		<script src="js/Detector.js"></script>
+		<script src="js/libs/stats.min.js"></script>
 
-    <div class="neighborhood-guides">
-        <div class="container">
-            <h2>webGL test</h2>
-            
-            <canvas id="lesson01-canvas" style="border: none;" width="500" height="500"></canvas>
-            <textarea cols="100" rows="20" id="out" name="out" style="display:none"></textarea>
-            
-        </div>
-    </div>
+		<script>
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+			var container, stats;
+			var camera, scene, renderer;
+			var raycaster, mouse;
+			var mesh, line;
+			init();
+			animate();
+			function init() {
+				container = document.getElementById( 'container' );
+				//
+				camera = new THREE.PerspectiveCamera( 27, window.innerWidth / window.innerHeight, 1, 3500 );
+				camera.position.z = 2750;
+				scene = new THREE.Scene();
+				scene.fog = new THREE.Fog( 0x050505, 2000, 3500 );
+				//
+				scene.add( new THREE.AmbientLight( 0x444444 ) );
+				var light1 = new THREE.DirectionalLight( 0xffffff, 0.5 );
+				light1.position.set( 1, 1, 1 );
+				scene.add( light1 );
+				var light2 = new THREE.DirectionalLight( 0xffffff, 1.5 );
+				light2.position.set( 0, -1, 0 );
+				scene.add( light2 );
+				//
+				var triangles = 500;
+				var geometry = new THREE.BufferGeometry();
+				var positions = new Float32Array( triangles * 3 * 3 );
+				var normals = new Float32Array( triangles * 3 * 3 );
+				var colors = new Float32Array( triangles * 3 * 3 );
+				var color = new THREE.Color();
+				var n = 1200, n2 = n/2;	// triangles spread in the cube
+				var d = 120, d2 = d/2;	// individual triangle size
+				var pA = new THREE.Vector3();
+				var pB = new THREE.Vector3();
+				var pC = new THREE.Vector3();
+				var cb = new THREE.Vector3();
+				var ab = new THREE.Vector3();
+				for ( var i = 0; i < positions.length; i += 9 ) {
+					// positions
+					var x = Math.random() * n - n2;
+					var y = Math.random() * n - n2;
+					var z = Math.random() * n - n2;
+					var ax = x + Math.random() * d - d2;
+					var ay = y + Math.random() * d - d2;
+					var az = z + Math.random() * d - d2;
+					var bx = x + Math.random() * d - d2;
+					var by = y + Math.random() * d - d2;
+					var bz = z + Math.random() * d - d2;
+					var cx = x + Math.random() * d - d2;
+					var cy = y + Math.random() * d - d2;
+					var cz = z + Math.random() * d - d2;
+					positions[ i ]     = ax;
+					positions[ i + 1 ] = ay;
+					positions[ i + 2 ] = az;
+					positions[ i + 3 ] = bx;
+					positions[ i + 4 ] = by;
+					positions[ i + 5 ] = bz;
+					positions[ i + 6 ] = cx;
+					positions[ i + 7 ] = cy;
+					positions[ i + 8 ] = cz;
+					// flat face normals
+					pA.set( ax, ay, az );
+					pB.set( bx, by, bz );
+					pC.set( cx, cy, cz );
+					cb.subVectors( pC, pB );
+					ab.subVectors( pA, pB );
+					cb.cross( ab );
+					cb.normalize();
+					var nx = cb.x;
+					var ny = cb.y;
+					var nz = cb.z;
+					normals[ i ]     = nx;
+					normals[ i + 1 ] = ny;
+					normals[ i + 2 ] = nz;
+					normals[ i + 3 ] = nx;
+					normals[ i + 4 ] = ny;
+					normals[ i + 5 ] = nz;
+					normals[ i + 6 ] = nx;
+					normals[ i + 7 ] = ny;
+					normals[ i + 8 ] = nz;
+					// colors
+					var vx = ( x / n ) + 0.5;
+					var vy = ( y / n ) + 0.5;
+					var vz = ( z / n ) + 0.5;
+					color.setRGB( vx, vy, vz );
+					colors[ i ]     = color.r;
+					colors[ i + 1 ] = color.g;
+					colors[ i + 2 ] = color.b;
+					colors[ i + 3 ] = color.r;
+					colors[ i + 4 ] = color.g;
+					colors[ i + 5 ] = color.b;
+					colors[ i + 6 ] = color.r;
+					colors[ i + 7 ] = color.g;
+					colors[ i + 8 ] = color.b;
+				}
+				geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+				geometry.addAttribute( 'normal', new THREE.BufferAttribute( normals, 3 ) );
+				geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ) );
+				geometry.computeBoundingSphere();
+				var material = new THREE.MeshPhongMaterial( {
+						color: 0xaaaaaa, specular: 0xffffff, shininess: 250,
+						side: THREE.DoubleSide, vertexColors: THREE.VertexColors
+				} );
+				mesh = new THREE.Mesh( geometry, material );
+				scene.add( mesh );
+				//
+				raycaster = new THREE.Raycaster();
+				mouse = new THREE.Vector2();
+				var geometry = new THREE.BufferGeometry();
+				geometry.addAttribute( 'position', new THREE.BufferAttribute( new Float32Array( 4 * 3 ), 3 ) );
+				var material = new THREE.LineBasicMaterial( { color: 0xffffff, linewidth: 2, transparent: true } );
+				//
+				renderer = new THREE.WebGLRenderer( { antialias: false } );
+				renderer.setClearColor( scene.fog.color );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				container.appendChild( renderer.domElement );
+				//
+				window.addEventListener( 'resize', onWindowResize, false );
+				document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+			}
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+			function onDocumentMouseMove( event ) {
+				event.preventDefault();
+				mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+				mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+			}
+			//
+			function animate() {
+				requestAnimationFrame( animate );
+				render();
+			}
+			function render() {
+				var time = Date.now() * 0.001;
+				mesh.rotation.x = time * 0.15;
+				mesh.rotation.y = time * 0.25;
 
-    <div class="learn-more">
-	  <div class="container">
-		<div class="row">
-		
-	      <div class="col-md-4">
-			<h3>END</h3>
-			<p><a href="#"></a></p>
-	      </div>
-		  
-    </div>  
-	  </div>
-    </div>
-  </body>
+				renderer.render( scene, camera );
+			}
+		</script>
+
+	</body>
 </html>
-
-
-<script id="shader-fs" type="x-shader/x-fragment">
-  precision mediump float;
-
-  uniform sampler2D sampler2d;
-
-  varying vec2 uv;
-
-  void main(void) {
-    vec4 color = texture2D(sampler2d, uv);
-    gl_FragColor = color;
-    //gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);
-  }
-</script>
-
-<script id="shader-vs" type="x-shader/x-vertex">
-  attribute vec3 aVertexPosition;
-  attribute vec3 aNormalPosition;
-  attribute vec2 aUVPosition;
-
-  uniform mat4 M;
-  uniform mat4 V;
-  uniform mat4 P;
-
-  varying vec2 uv;
-
-  void main(void) {
-    gl_Position = P * V * M * vec4(aVertexPosition, 1.0);
-    uv = aUVPosition;
-  }
-</script>
-
